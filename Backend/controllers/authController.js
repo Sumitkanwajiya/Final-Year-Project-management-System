@@ -58,10 +58,13 @@ export const login = asyncHandler(async (req, res, next) => {
 
 // Logout
 export const logout = asyncHandler(async (req, res, next) => {
+    const isProduction = process.env.NODE_ENV === 'production' || (process.env.FRONTEND_URL && process.env.FRONTEND_URL.includes('vercel.app'));
     res.status(200)
         .cookie("token", "", {
             expires: new Date(Date.now()),
-            httpOnly: true
+            httpOnly: true,
+            sameSite: isProduction ? "None" : "Lax",
+            secure: isProduction,
         })
         .json({
             success: true,
