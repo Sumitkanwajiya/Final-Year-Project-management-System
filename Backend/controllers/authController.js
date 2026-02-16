@@ -28,22 +28,28 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 // Login
 // Login
 export const login = asyncHandler(async (req, res, next) => {
+    console.log("Login Request Body:", req.body); // Debugging
     const { email, password, role } = req.body || {};
     if (!email || !password) {
+        console.log("Login failed: Missing email or password"); // Debugging
         return next(new ErrorHandler("Please provide email and password", 400));
     }
 
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
+        console.log(`Login failed: User not found for email ${email}`); // Debugging
+        res.cookie("token", "", { expires: new Date(0) }); // Clear cookie
         return next(new ErrorHandler("Invalid email or password", 401));
     }
 
     if (role && user.role.toLowerCase() !== role.toLowerCase()) {
+        console.log(`Login failed: Role mismatch. Expected ${user.role}, got ${role}`); // Debugging
         return next(new ErrorHandler("User not found with this role", 401));
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
+        console.log("Login failed: Password incorrect"); // Debugging
         return next(new ErrorHandler("Invalid email or password", 401));
     }
 
