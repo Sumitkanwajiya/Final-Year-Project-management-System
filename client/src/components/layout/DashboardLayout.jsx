@@ -28,10 +28,10 @@ const DashboardLayout = () => {
 
         {/* Main Content */}
         <main
-          className={`flex-1 transition-all duration-300 ${sidebarOpen ? "lg:ml-64" : "lg:ml-20"
+          className={`flex-1 transition-all duration-300 w-full max-w-full overflow-x-hidden ${sidebarOpen ? "lg:ml-64" : "lg:ml-20"
             }`}
         >
-          <div className="p-6">
+          <div className="p-4 lg:p-6 w-full max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>

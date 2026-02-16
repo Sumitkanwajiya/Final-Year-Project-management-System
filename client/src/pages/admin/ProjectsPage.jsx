@@ -134,18 +134,18 @@ const ProjectsPage = () => {
   return (
     <div className="min-h-screen bg-slate-50/50 font-sans text-slate-800 pb-12">
       {/* Hero Section */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-5">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm transition-all pb-2 md:pb-0">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-5">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
                 <FaProjectDiagram className="text-indigo-600" />
                 Project Management
               </h1>
-              <p className="text-slate-500 text-sm mt-1">Oversee, review, and manage all student projects.</p>
+              <p className="text-slate-500 text-xs md:text-sm mt-1 hidden md:block">Oversee, review, and manage all student projects.</p>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="relative group">
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <div className="relative group w-full md:w-auto">
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                 <input
                   type="text"
@@ -167,8 +167,8 @@ const ProjectsPage = () => {
                 key={status}
                 onClick={() => setFilter(status)}
                 className={`pb-3 text-sm font-semibold transition-all relative whitespace-nowrap ${filter === status
-                    ? 'text-indigo-600'
-                    : 'text-slate-500 hover:text-slate-700'
+                  ? 'text-indigo-600'
+                  : 'text-slate-500 hover:text-slate-700'
                   }`}
               >
                 {status}
@@ -184,33 +184,41 @@ const ProjectsPage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 space-y-8 mt-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <StatCard
-            title="Total Projects"
-            value={projectStats.total}
-            icon={<FaProjectDiagram />}
-            color="indigo"
-          />
-          <StatCard
-            title="Pending Review"
-            value={projectStats.pending}
-            icon={<FaClock />}
-            color="amber"
-          />
-          <StatCard
-            title="Active Projects"
-            value={projectStats.active}
-            icon={<FaCheckCircle />}
-            color="emerald"
-          />
-          <StatCard
-            title="Completed"
-            value={projectStats.completed}
-            icon={<FaFileAlt />}
-            color="cyan"
-          />
+      <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-6 md:space-y-8 mt-6 md:mt-8">
+        {/* Stats Overview - Horizontal Scroll on Mobile */}
+        <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-5 md:pb-0 hide-scrollbar snap-x -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Total Projects"
+              value={projectStats.total}
+              icon={<FaProjectDiagram />}
+              color="indigo"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Pending Review"
+              value={projectStats.pending}
+              icon={<FaClock />}
+              color="amber"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Active Projects"
+              value={projectStats.active}
+              icon={<FaCheckCircle />}
+              color="emerald"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Completed"
+              value={projectStats.completed}
+              icon={<FaFileAlt />}
+              color="cyan"
+            />
+          </div>
         </div>
 
         {/* Projects Grid */}
@@ -290,13 +298,13 @@ const StatCard = ({ title, value, icon, color }) => {
   }[color] || "bg-slate-50 text-slate-600";
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] border border-slate-100 hover:shadow-lg transition-all duration-300 group">
+    <div className="bg-white p-4 md:p-6 rounded-2xl shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] border border-slate-100 hover:shadow-lg transition-all duration-300 group">
       <div className="flex justify-between items-start">
         <div>
           <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">{title}</p>
-          <h3 className="text-3xl font-extrabold text-slate-800">{value}</h3>
+          <h3 className="text-xl md:text-3xl font-extrabold text-slate-800">{value}</h3>
         </div>
-        <div className={`p-3 rounded-xl ${colorStyles} transition-colors group-hover:scale-110 duration-300`}>
+        <div className={`p-2 md:p-3 rounded-xl ${colorStyles} transition-colors group-hover:scale-110 duration-300`}>
           {React.cloneElement(icon, { size: 20 })}
         </div>
       </div>
@@ -382,8 +390,8 @@ const Modal = ({ project, onClose, onApprove, onReject, onDownload }) => (
           <div className="flex items-center gap-3 mb-2">
             <h2 className="text-2xl font-bold text-slate-800 leading-tight">{project.title}</h2>
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase border ${project.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                project.status === 'Rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                  'bg-amber-50 text-amber-600 border-amber-100'
+              project.status === 'Rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                'bg-amber-50 text-amber-600 border-amber-100'
               }`}>
               {project.status}
             </span>
@@ -556,8 +564,8 @@ const ConfirmationModal = ({ type, title, onConfirm, onCancel }) => {
           <button
             onClick={onConfirm}
             className={`py-2.5 px-4 text-white font-bold rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 ${isApprove
-                ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'
-                : 'bg-rose-500 hover:bg-rose-600 shadow-rose-200'
+              ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200'
+              : 'bg-rose-500 hover:bg-rose-600 shadow-rose-200'
               }`}
           >
             Confirm {isApprove ? 'Approval' : 'Rejection'}

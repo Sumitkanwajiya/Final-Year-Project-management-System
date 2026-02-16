@@ -75,56 +75,66 @@ const TeacherDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-slate-50/50 font-sans text-slate-800 pb-20 md:pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-8 py-6 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-extrabold text-slate-900 flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-xl">
-              <GraduationCap className="w-8 h-8 text-white" />
-            </div>
-            Welcome back, {authUser?.name}!
-          </h1>
-          <p className="text-slate-500 text-sm mt-2">
-            Here's an overview of your supervision activities
-          </p>
+      <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-4 md:py-6 sticky top-0 z-10 shadow-sm md:shadow-none transition-all">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
+              <div className="p-1.5 md:p-2 bg-indigo-600 rounded-lg md:rounded-xl text-white">
+                <GraduationCap className="w-5 h-5 md:w-6 md:h-6" />
+              </div>
+              <span>Welcome, {authUser?.name?.split(' ')[0]}</span>
+            </h1>
+            <p className="text-slate-500 text-xs md:text-sm mt-1 hidden md:block">
+              Manage your students, projects, and requests
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 space-y-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            title="Pending Requests"
-            value={dashboardStats?.pendingRequests || 0}
-            icon={<Clock className="w-6 h-6 text-amber-600" />}
-            bg="bg-amber-50"
-            border="border-amber-100"
-            onClick={() => navigate("/teacher/pending-requests")}
-            trend={dashboardStats?.pendingRequests > 0 ? "Needs attention" : "All clear"}
-          />
-          <StatCard
-            title="Assigned Students"
-            value={dashboardStats?.assignedStudents || 0}
-            icon={<Users className="w-6 h-6 text-blue-600" />}
-            bg="bg-blue-50"
-            border="border-blue-100"
-            onClick={() => navigate("/teacher/assigned-students")}
-          />
-          <StatCard
-            title="Total Projects"
-            value={dashboardStats?.totalProjects || 0}
-            icon={<Briefcase className="w-6 h-6 text-indigo-600" />}
-            bg="bg-indigo-50"
-            border="border-indigo-100"
-          />
-          <StatCard
-            title="Completed Projects"
-            value={dashboardStats?.completedProjects || 0}
-            icon={<CheckCircle className="w-6 h-6 text-emerald-600" />}
-            bg="bg-emerald-50"
-            border="border-emerald-100"
-          />
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
+        {/* Stats Cards - Horizontal Scroll on Mobile */}
+        <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:pb-0 hide-scrollbar snap-x -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Pending Requests"
+              value={dashboardStats?.pendingRequests || 0}
+              icon={<Clock className="w-6 h-6 text-amber-600" />}
+              bg="bg-amber-50"
+              border="border-amber-100"
+              onClick={() => navigate("/teacher/pending-requests")}
+              trend={dashboardStats?.pendingRequests > 0 ? "Needs attention" : "All clear"}
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Assigned Students"
+              value={dashboardStats?.assignedStudents || 0}
+              icon={<Users className="w-6 h-6 text-blue-600" />}
+              bg="bg-blue-50"
+              border="border-blue-100"
+              onClick={() => navigate("/teacher/assigned-students")}
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Total Projects"
+              value={dashboardStats?.totalProjects || 0}
+              icon={<Briefcase className="w-6 h-6 text-indigo-600" />}
+              bg="bg-indigo-50"
+              border="border-indigo-100"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Completed Projects"
+              value={dashboardStats?.completedProjects || 0}
+              icon={<CheckCircle className="w-6 h-6 text-emerald-600" />}
+              bg="bg-emerald-50"
+              border="border-emerald-100"
+            />
+          </div>
         </div>
 
         {/* Charts Section */}
@@ -213,12 +223,12 @@ const TeacherDashboard = () => {
                   className="flex items-start gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors"
                 >
                   <div className={`p-2 rounded-lg ${notification.priority === 'High' ? 'bg-red-100' :
-                      notification.priority === 'Medium' ? 'bg-amber-100' :
-                        'bg-blue-100'
+                    notification.priority === 'Medium' ? 'bg-amber-100' :
+                      'bg-blue-100'
                     }`}>
                     <Bell className={`w-4 h-4 ${notification.priority === 'High' ? 'text-red-600' :
-                        notification.priority === 'Medium' ? 'text-amber-600' :
-                          'text-blue-600'
+                      notification.priority === 'Medium' ? 'text-amber-600' :
+                        'text-blue-600'
                       }`} />
                   </div>
                   <div className="flex-1">
@@ -244,7 +254,7 @@ const TeacherDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <QuickActionCard
             title="View Pending Requests"
             description="Review supervisor requests from students"

@@ -182,43 +182,49 @@ const AssignSupervisor = () => {
   return (
     <div className="min-h-screen bg-slate-50/50 font-sans text-slate-800 pb-12">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-8 py-6 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-4 md:py-6 sticky top-0 z-10 shadow-sm md:shadow-none transition-all">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-            <UserCheck className="w-7 h-7 text-indigo-600" />
+          <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
+            <UserCheck className="w-5 h-5 md:w-7 md:h-7 text-indigo-600" />
             Assign Supervisors
           </h1>
-          <p className="text-slate-500 text-sm mt-1">
+          <p className="text-slate-500 text-xs md:text-sm mt-1 hidden md:block">
             Match students with available supervisors for their approved projects
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard
-            title="Students Awaiting Supervisor"
-            value={eligibleStudents.length}
-            icon={<GraduationCap className="w-6 h-6 text-amber-600" />}
-            bg="bg-amber-50"
-            border="border-amber-100"
-          />
-          <StatCard
-            title="Available Teachers"
-            value={availableTeachers.filter(t => t.hasCapacity).length}
-            icon={<Users className="w-6 h-6 text-emerald-600" />}
-            bg="bg-emerald-50"
-            border="border-emerald-100"
-          />
-          <StatCard
-            title="Total Assignments"
-            value={availableTeachers.reduce((sum, t) => sum + t.assignedCount, 0)}
-            icon={<CheckCircle className="w-6 h-6 text-blue-600" />}
-            bg="bg-blue-50"
-            border="border-blue-100"
-          />
+        {/* Stats - Horizontal Scroll on Mobile */}
+        <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-3 md:gap-6 md:pb-0 hide-scrollbar snap-x -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Students Awaiting"
+              value={eligibleStudents.length}
+              icon={<GraduationCap className="w-6 h-6 text-amber-600" />}
+              bg="bg-amber-50"
+              border="border-amber-100"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Available Teachers"
+              value={availableTeachers.filter(t => t.hasCapacity).length}
+              icon={<Users className="w-6 h-6 text-emerald-600" />}
+              bg="bg-emerald-50"
+              border="border-emerald-100"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Total Assignments"
+              value={availableTeachers.reduce((sum, t) => sum + t.assignedCount, 0)}
+              icon={<CheckCircle className="w-6 h-6 text-blue-600" />}
+              bg="bg-blue-50"
+              border="border-blue-100"
+            />
+          </div>
         </div>
 
         {/* Pending & Processed Supervisor Requests */}
@@ -247,8 +253,8 @@ const AssignSupervisor = () => {
                 <div
                   key={request._id}
                   className={`bg-white rounded-xl border-2 p-5 shadow-lg transition-all ${request.processedStatus === 'approved'
-                      ? 'border-emerald-500 bg-emerald-50'
-                      : 'border-rose-500 bg-rose-50'
+                    ? 'border-emerald-500 bg-emerald-50'
+                    : 'border-rose-500 bg-rose-50'
                     }`}
                 >
                   {/* Status Badge */}
@@ -560,11 +566,11 @@ const AssignSupervisor = () => {
 };
 
 const StatCard = ({ title, value, icon, bg, border }) => (
-  <div className={`p-6 rounded-2xl ${bg} border ${border} flex items-center gap-4`}>
+  <div className={`p-4 md:p-6 rounded-2xl ${bg} border ${border} flex items-center gap-4`}>
     <div className="p-3 bg-white rounded-xl shadow-sm">{icon}</div>
     <div>
-      <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">{title}</p>
-      <h3 className="text-2xl font-extrabold text-slate-900">{value}</h3>
+      <p className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">{title}</p>
+      <h3 className="text-xl md:text-2xl font-extrabold text-slate-900">{value}</h3>
     </div>
   </div>
 );

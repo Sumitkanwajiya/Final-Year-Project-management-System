@@ -1,5 +1,5 @@
 import express from "express";
-import { createDeadline, getAllDeadlines } from "../controllers/dealineController.js";
+import { createDeadline, getAllDeadlines } from "../controllers/deadlineController.js";
 import { isAuthenticated, isAuthorized } from "../middleware/authMiddleware.js";
 
 const router = express.Router();

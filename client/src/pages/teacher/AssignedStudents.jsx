@@ -90,20 +90,20 @@ const AssignedStudents = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 space-y-6 md:space-y-8 pb-24 md:pb-8">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-indigo-600 to-violet-600 p-8 rounded-2xl shadow-lg text-white">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-indigo-600 to-violet-600 p-5 md:p-8 rounded-2xl shadow-lg text-white">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <GraduationCap className="w-8 h-8 opacity-90" />
+          <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
+            <GraduationCap className="w-6 h-6 md:w-8 md:h-8 opacity-90" />
             Assigned Students
           </h1>
-          <p className="mt-2 text-indigo-100 opacity-90 max-w-xl">
-            Monitor progress, review projects, and guide your students towards success.
+          <p className="mt-1 md:mt-2 text-indigo-100 opacity-90 text-sm md:text-base max-w-xl">
+            Monitor progress and review projects.
           </p>
         </div>
 
-        <div className="relative group">
+        <div className="relative group w-full md:w-auto">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-indigo-300 group-focus-within:text-white transition-colors" />
           </div>

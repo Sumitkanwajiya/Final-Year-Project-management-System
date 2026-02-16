@@ -28,7 +28,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b border-slate-200 fixed w-full top-0 z-30">
+    <nav className="bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200/80 fixed w-full top-0 z-30 transition-all duration-300">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Left side */}
@@ -63,11 +63,11 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
             </button>
 
             {/* Logo and title */}
-            <div className="flex items-center ml-4">
+            <div className="flex items-center ml-3 lg:ml-4">
               <div className="flex-shrink-0 flex items-center">
-                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 lg:w-9 lg:h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm">
                   <svg
-                    className="w-5 h-5 text-white"
+                    className="w-5 h-5 lg:w-6 lg:h-6 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -80,9 +80,9 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
                     />
                   </svg>
                 </div>
-                <div className="ml-3 hidden sm:block">
-                  <h1 className="text-lg font-semibold text-slate-800">
-                    Final Year Project Management System
+                <div className="ml-3 hidden md:block">
+                  <h1 className="text-lg font-bold text-slate-800 tracking-tight">
+                    Project Management System
                   </h1>
                 </div>
               </div>

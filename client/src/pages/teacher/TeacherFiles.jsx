@@ -109,34 +109,34 @@ const TeacherFiles = () => {
   const hasFiles = Object.keys(groupedFiles).length > 0;
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8 animate-fade-in bg-gray-50/50 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 space-y-6 md:space-y-8 animate-fade-in bg-gray-50/50 min-h-screen pb-24 md:pb-8">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-2xl md:rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/3 -translate-y-1/2"></div>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <h1 className="text-4xl font-bold flex items-center gap-4">
+            <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
               <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                <FolderOpen className="w-8 h-8" />
+                <FolderOpen className="w-6 h-6 md:w-8 md:h-8" />
               </div>
               Student Files
             </h1>
-            <p className="text-blue-100 mt-2 text-lg max-w-xl font-light">
-              Organized repository of all student submissions, categorized for easy access.
+            <p className="text-blue-100 mt-2 text-sm md:text-base max-w-xl font-light">
+              Organized repository of all student submissions.
             </p>
           </div>
         </div>
       </div>
 
       {/* Search */}
-      <div className="relative max-w-3xl mx-auto -mt-6 z-20 shadow-lg">
+      <div className="relative max-w-3xl mx-auto -mt-10 md:-mt-12 z-20 shadow-lg px-2">
         <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none">
           <Search className="w-5 h-5 text-gray-400" />
         </div>
         <input
           type="text"
-          placeholder="Search by student, project, or file name..."
-          className="w-full pl-14 pr-6 py-4 bg-white border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all text-gray-700 placeholder-gray-400 font-medium"
+          placeholder="Search files..."
+          className="w-full pl-12 pr-6 py-3 md:py-4 bg-white border border-gray-100 rounded-xl md:rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all text-gray-700 placeholder-gray-400 font-medium text-sm md:text-base"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

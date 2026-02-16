@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createDeadline } from "../../store/slices/deadlineSlice";
 import { getAllProjects } from "../../store/slices/adminSlice"; // Assuming this exists
-import { X, Calendar, Type, Briefcase } from "lucide-react";
+import { X, Calendar, Type, Briefcase, Plus } from "lucide-react";
 
-const CreateDeadlineModal = ({ isOpen, onClose }) => {
+const CreateDeadlineModal = ({ isOpen, onClose, preSelectedProjectId }) => {
     const dispatch = useDispatch();
     const { projects } = useSelector((state) => state.admin);
 
@@ -17,8 +17,14 @@ const CreateDeadlineModal = ({ isOpen, onClose }) => {
     useEffect(() => {
         if (isOpen) {
             dispatch(getAllProjects());
+            // Fully reset form when opening
+            setFormData({
+                name: "",
+                dueDate: "",
+                projectId: preSelectedProjectId || ""
+            });
         }
-    }, [isOpen, dispatch]);
+    }, [isOpen, dispatch, preSelectedProjectId]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,7 +42,7 @@ const CreateDeadlineModal = ({ isOpen, onClose }) => {
             name: formData.name,
             dueDate: formData.dueDate
         })).then((result) => {
-            if (result.meta.requestStatus === 'fulfilled') {
+            if (result?.meta?.requestStatus === 'fulfilled') {
                 onClose();
                 setFormData({ name: "", dueDate: "", projectId: "" });
             }
@@ -46,74 +52,90 @@ const CreateDeadlineModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in">
-            <div className="relative w-full max-w-md p-6 bg-white rounded-xl shadow-2xl transform transition-all scale-100">
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
-                >
-                    <X size={24} />
-                </button>
-
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Set New Deadline</h2>
-
-                <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm animate-fade-in p-4">
+            <div className="relative w-full md:w-auto md:max-w-md bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ring-1 ring-slate-900/5">
+                {/* Header */}
+                <div className="flex items-center justify-between p-5 md:p-6 border-b border-slate-100 shrink-0">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                            <Type className="w-4 h-4 text-gray-400" /> Deadline Title
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="e.g. Final Proposal Submission"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                            required
-                        />
+                        <h2 className="text-lg md:text-xl font-bold text-slate-900">Set New Deadline</h2>
+                        <p className="text-xs text-slate-500 mt-0.5">Assign a due date to a project</p>
                     </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-gray-400" /> Project
-                        </label>
-                        <select
-                            name="projectId"
-                            value={formData.projectId}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white"
-                            required
-                        >
-                            <option value="">Select a project...</option>
-                            {projects && projects.map(project => (
-                                <option key={project._id} value={project._id}>
-                                    {project.title} ({project.student?.name || 'Unknown'})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-gray-400" /> Due Date
-                        </label>
-                        <input
-                            type="date"
-                            name="dueDate"
-                            value={formData.dueDate}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                            required
-                        />
-                    </div>
-
                     <button
-                        type="submit"
-                        className="w-full py-3 mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                        onClick={onClose}
+                        className="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-full hover:bg-slate-100 active:bg-slate-200"
                     >
-                        Create Deadline
+                        <X size={20} />
                     </button>
-                </form>
+                </div>
+
+                {/* Content */}
+                <div className="p-5 md:p-6 overflow-y-auto">
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                <Type className="w-4 h-4 text-indigo-500" /> Deadline Title
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="e.g. Final Proposal Submission"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50/50 focus:bg-white"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                <Briefcase className="w-4 h-4 text-indigo-500" /> Linked Project
+                            </label>
+                            <div className="relative">
+                                <select
+                                    name="projectId"
+                                    value={formData.projectId}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all bg-slate-50/50 focus:bg-white appearance-none text-sm truncate pr-10"
+                                    required
+                                >
+                                    <option value="">Select a project...</option>
+                                    {projects && projects.map(project => (
+                                        <option key={project._id} value={project._id}>
+                                            {project.title} • {project.student?.name || 'Unknown'}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-500">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-indigo-500" /> Due Date
+                            </label>
+                            <input
+                                type="date"
+                                name="dueDate"
+                                value={formData.dueDate}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50/50 focus:bg-white"
+                                required
+                            />
+                        </div>
+
+                        <div className="pt-4">
+                            <button
+                                type="submit"
+                                className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
+                            >
+                                <Plus className="w-5 h-5" />
+                                Create Deadline
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );

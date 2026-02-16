@@ -116,14 +116,14 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-slate-50/50 font-sans text-slate-800 pb-12">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-8 py-6 sticky top-0 z-10">
+      <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-4 md:py-6 sticky top-0 z-10 shadow-sm md:shadow-none">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <LayoutDashboard className="w-6 h-6 text-indigo-600" />
+            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
+              <LayoutDashboard className="w-5 h-5 md:w-6 md:h-6 text-indigo-600" />
               Admin Dashboard
             </h1>
-            <p className="text-slate-500 text-sm mt-1">
+            <p className="text-slate-500 text-xs md:text-sm mt-1 hidden md:block">
               Overview of system performance and statistics
             </p>
           </div>
@@ -133,10 +133,15 @@ const AdminDashboard = () => {
             </p>
             <p className="text-xs text-slate-400">System Administrator</p>
           </div>
+          <div className="sm:hidden">
+            <div className="h-8 w-8 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+              <LayoutDashboard size={18} />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
 
 
 
@@ -144,70 +149,78 @@ const AdminDashboard = () => {
 
 
 
-        {/* Key Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            title="Total Students"
-            value={students?.length || 0}
-            icon={<GraduationCap className="w-6 h-6 text-blue-600" />}
-            bg="bg-blue-50"
-            border="border-blue-100"
-            trend="+12% this month"
-          />
-          <StatCard
-            title="Total Teachers"
-            value={teachers?.length || 0}
-            icon={<Users className="w-6 h-6 text-emerald-600" />}
-            bg="bg-emerald-50"
-            border="border-emerald-100"
-            trend="Stable"
-          />
-          <StatCard
-            title="Active Supervisors"
-            value={stats?.totalSupervisors || 0}
-            icon={<UserCheck className="w-6 h-6 text-violet-600" />}
-            bg="bg-violet-50"
-            border="border-violet-100"
-            trend={`${stats?.totalTeachers ? Math.round((stats.totalSupervisors / stats.totalTeachers) * 100) : 0}% of teachers`}
-          />
-          <StatCard
-            title="Total Projects"
-            value={stats?.totalProjects || 0}
-            icon={<Briefcase className="w-6 h-6 text-amber-600" />}
-            bg="bg-amber-50"
-            border="border-amber-100"
-            trend="Active Cycle"
-          />
+        {/* Key Metrics - Horizontal Scroll on Mobile */}
+        <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:pb-0 hide-scrollbar snap-x -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Total Students"
+              value={students?.length || 0}
+              icon={<GraduationCap className="w-6 h-6 text-blue-600" />}
+              bg="bg-blue-50"
+              border="border-blue-100"
+              trend="+12% this month"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Total Teachers"
+              value={teachers?.length || 0}
+              icon={<Users className="w-6 h-6 text-emerald-600" />}
+              bg="bg-emerald-50"
+              border="border-emerald-100"
+              trend="Stable"
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Active Supervisors"
+              value={stats?.totalSupervisors || 0}
+              icon={<UserCheck className="w-6 h-6 text-violet-600" />}
+              bg="bg-violet-50"
+              border="border-violet-100"
+              trend={`${stats?.totalTeachers ? Math.round((stats.totalSupervisors / stats.totalTeachers) * 100) : 0}% of teachers`}
+            />
+          </div>
+          <div className="min-w-[280px] md:min-w-0 snap-center">
+            <StatCard
+              title="Total Projects"
+              value={stats?.totalProjects || 0}
+              icon={<Briefcase className="w-6 h-6 text-amber-600" />}
+              bg="bg-amber-50"
+              border="border-amber-100"
+              trend="Active Cycle"
+            />
+          </div>
         </div>
 
-        {/* Status & Alerts Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Status & Alerts Section - Mobile Optimized Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           <StatusCard
             title="Active Projects"
             value={stats?.activeProjects || 0}
-            label="Currently Ongoing"
-            icon={<Briefcase className="w-5 h-5 text-indigo-500" />}
+            label="Ongoing"
+            icon={<Briefcase className="w-4 h-4 md:w-5 md:h-5 text-indigo-500" />}
             color="indigo"
           />
           <StatusCard
-            title="Nearby Deadlines"
+            title="Due Soon"
             value={stats?.nearbyDeadlines || 0}
-            label="Due in 2 Weeks"
-            icon={<Clock className="w-5 h-5 text-amber-500" />}
+            label="< 14 Days"
+            icon={<Clock className="w-4 h-4 md:w-5 md:h-5 text-amber-500" />}
             color="amber"
           />
           <StatusCard
-            title="Pending Requests"
+            title="Requests"
             value={stats?.pendingRequests || 0}
-            label="Supervisor Requests"
-            icon={<AlertCircle className="w-5 h-5 text-rose-500" />}
+            label="Pending"
+            icon={<AlertCircle className="w-4 h-4 md:w-5 md:h-5 text-rose-500" />}
             color="rose"
           />
           <StatusCard
-            title="Pending Projects"
+            title="Approvals"
             value={stats?.pendingProjects || 0}
-            label="Awaiting Approval"
-            icon={<Loader2 className="w-5 h-5 text-blue-500" />}
+            label="Waiting"
+            icon={<Loader2 className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />}
             color="blue"
           />
         </div>
@@ -281,32 +294,32 @@ const AdminDashboard = () => {
 
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <QuickActionButton
             title="Add Student"
-            subtitle="Create new student account"
-            icon={<GraduationCap className="w-5 h-5" />}
+            subtitle="New account"
+            icon={<GraduationCap className="w-4 h-4 md:w-5 md:h-5" />}
             onClick={() => setIsStudentModalOpen(true)}
             color="blue"
           />
           <QuickActionButton
             title="Add Teacher"
-            subtitle="Create new teacher account"
-            icon={<Users className="w-5 h-5" />}
+            subtitle="New account"
+            icon={<Users className="w-4 h-4 md:w-5 md:h-5" />}
             onClick={() => setIsTeacherModalOpen(true)}
             color="emerald"
           />
           <QuickActionButton
             title="View Files"
-            subtitle="Access project files"
-            icon={<FileText className="w-5 h-5" />}
+            subtitle="All project files"
+            icon={<FileText className="w-4 h-4 md:w-5 md:h-5" />}
             onClick={() => setFileModal({ isOpen: true, type: null, title: "All Files" })}
             color="indigo"
           />
           <QuickActionButton
             title="System Reports"
-            subtitle="Download statistics"
-            icon={<ClipboardList className="w-5 h-5" />}
+            subtitle="Download stats"
+            icon={<ClipboardList className="w-4 h-4 md:w-5 md:h-5" />}
             onClick={() => setFileModal({ isOpen: true, type: "Report", title: "System Reports" })}
             color="amber"
           />
@@ -353,13 +366,13 @@ const StatusCard = ({ title, value, label, icon, color }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between group hover:border-indigo-300 transition-colors">
+    <div className="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between group hover:border-indigo-300 transition-colors">
       <div>
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{title}</p>
-        <p className="text-2xl font-bold text-slate-900">{value}</p>
-        <p className="text-xs text-slate-500 mt-1">{label}</p>
+        <p className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{title}</p>
+        <p className="text-xl md:text-2xl font-bold text-slate-900">{value}</p>
+        <p className="text-[10px] md:text-xs text-slate-500 mt-1">{label}</p>
       </div>
-      <div className={`p-4 rounded-full ${colorStyles[color]} group-hover:scale-110 transition-transform`}>
+      <div className={`p-3 md:p-4 rounded-full ${colorStyles[color]} group-hover:scale-110 transition-transform`}>
         {icon}
       </div>
     </div>
@@ -380,14 +393,14 @@ const QuickActionButton = ({ title, subtitle, icon, onClick, color }) => {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md hover:border-slate-300 group text-left"
+      className="flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-4 p-4 md:p-4 bg-white border border-slate-200 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md hover:border-slate-300 group text-center md:text-left"
     >
-      <div className={`p-3 rounded-lg text-white shadow-lg ${colorStyles[color]} group-hover:scale-110 transition-transform`}>
+      <div className={`p-2.5 md:p-3 rounded-lg text-white shadow-lg ${colorStyles[color]} group-hover:scale-110 transition-transform`}>
         {icon}
       </div>
       <div>
-        <p className="font-bold text-slate-800 text-sm">{title}</p>
-        <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
+        <p className="font-bold text-slate-800 text-xs md:text-sm">{title}</p>
+        <p className="text-[10px] md:text-xs text-slate-500 mt-0.5">{subtitle}</p>
       </div>
     </button>
   );

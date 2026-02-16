@@ -49,48 +49,56 @@ const ManageTeachers = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Manage Teachers</h1>
-          <p className="text-slate-500 mt-1">View, add, and manage teacher accounts</p>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-800">Manage Teachers</h1>
+          <p className="text-slate-500 text-xs md:text-sm mt-1">View, add, and manage teacher accounts</p>
         </div>
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
+          className="hidden md:flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
         >
           <Plus size={20} />
           <span>Add New Teacher</span>
         </button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+      {/* Mobile Fixed FAB */}
+      <button
+        onClick={() => setIsAddModalOpen(true)}
+        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-600/30 flex items-center justify-center z-50 active:scale-90 transition-transform"
+      >
+        <Plus size={24} />
+      </button>
+
+      {/* Stats Cards - Horizontal Scroll on Mobile */}
+      <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-3 md:gap-6 md:pb-0 hide-scrollbar snap-x -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="min-w-[280px] md:min-w-0 snap-center bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
           <div className="p-3 bg-purple-50 text-purple-600 rounded-lg">
             <GraduationCap size={24} />
           </div>
           <div>
-            <p className="text-sm text-slate-500 font-medium">Total Teachers</p>
-            <h3 className="text-2xl font-bold text-slate-800">{teachers?.length || 0}</h3>
+            <p className="text-xs md:text-sm text-slate-500 font-medium">Total Teachers</p>
+            <h3 className="text-xl md:text-2xl font-bold text-slate-800">{teachers?.length || 0}</h3>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div className="min-w-[280px] md:min-w-0 snap-center bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
           <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
             <Users size={24} />
           </div>
           <div>
-            <p className="text-sm text-slate-500 font-medium">Assigned Students</p>
-            <h3 className="text-2xl font-bold text-slate-800">{totalAssignedStudents}</h3>
+            <p className="text-xs md:text-sm text-slate-500 font-medium">Assigned Students</p>
+            <h3 className="text-xl md:text-2xl font-bold text-slate-800">{totalAssignedStudents}</h3>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div className="min-w-[280px] md:min-w-0 snap-center bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
           <div className="p-3 bg-orange-50 text-orange-600 rounded-lg">
             <Briefcase size={24} />
           </div>
           <div>
-            <p className="text-sm text-slate-500 font-medium">Departments</p>
-            <h3 className="text-2xl font-bold text-slate-800">{uniqueDepartments}</h3>
+            <p className="text-xs md:text-sm text-slate-500 font-medium">Departments</p>
+            <h3 className="text-xl md:text-2xl font-bold text-slate-800">{uniqueDepartments}</h3>
           </div>
         </div>
       </div>
@@ -98,14 +106,14 @@ const ManageTeachers = () => {
       {/* Main Content Card */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Search Bar */}
-        <div className="p-6 border-b border-slate-100">
+        <div className="p-4 md:p-6 border-b border-slate-100">
           <div className="relative max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-slate-400" />
             </div>
             <input
               type="text"
-              placeholder="Search by name, email, department, or expertise..."
+              placeholder="Search teachers..."
               className="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -113,9 +121,76 @@ const ManageTeachers = () => {
           </div>
         </div>
 
-        {/* Table */}
+        {/* Table/Card View */}
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-4 p-4">
+            {loading ? (
+              <div className="text-center py-10 text-slate-500">
+                <Loader className="animate-spin size-8 text-blue-500 mx-auto mb-2" />
+                <p>Loading teachers...</p>
+              </div>
+            ) : filteredTeachers?.length === 0 ? (
+              <div className="text-center py-10 text-slate-500 bg-slate-50 rounded-lg border border-slate-100">
+                <p>No teachers found.</p>
+              </div>
+            ) : (
+              filteredTeachers?.map((teacher) => (
+                <div key={teacher._id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold text-lg">
+                        {teacher.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-900">{teacher.name}</h3>
+                        <div className="flex items-center text-xs text-slate-500 mt-0.5">
+                          <Mail className="w-3 h-3 mr-1" />
+                          <span className="truncate max-w-[150px]">{teacher.email}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEditClick(teacher)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      >
+                        <Edit size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(teacher._id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t border-slate-100">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500 flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" /> Department</span>
+                      <span className="font-medium text-slate-700">{teacher.department || "N/A"}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500 flex items-center gap-1"><Users className="w-3.5 h-3.5" /> Students</span>
+                      <span className="font-medium text-slate-700">
+                        {students?.filter(s => s.supervisor?._id === teacher._id).length || 0} / {teacher.maxStudents || 0}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500">Expertise</span>
+                      <span className="font-medium text-slate-700 truncate max-w-[150px] text-right">
+                        {Array.isArray(teacher.experties) ? teacher.experties.join(", ") : teacher.experties || "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop Table View */}
+          <table className="hidden md:table min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">

@@ -53,16 +53,16 @@ const ManageStudents = () => {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
+          className="hidden md:flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
         >
           <Plus size={20} />
           <span>Add New Student</span>
         </button>
       </div>
 
-      {/* Stats Cards (Optional but adds polish) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+      {/* Stats Cards - Horizontal Scroll on Mobile */}
+      <div className="flex overflow-x-auto pb-4 gap-4 md:grid md:grid-cols-3 md:gap-6 md:pb-0 hide-scrollbar snap-x">
+        <div className="min-w-[240px] md:min-w-0 bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 snap-center">
           <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
             <User size={24} />
           </div>
@@ -72,7 +72,7 @@ const ManageStudents = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div className="min-w-[240px] md:min-w-0 bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 snap-center">
           <div className="p-3 bg-yellow-50 text-yellow-600 rounded-lg">
             <AlertCircle size={24} />
           </div>
@@ -82,7 +82,7 @@ const ManageStudents = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div className="min-w-[240px] md:min-w-0 bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4 snap-center">
           <div className="p-3 bg-green-50 text-green-600 rounded-lg">
             <CheckCircle size={24} />
           </div>
@@ -94,26 +94,94 @@ const ManageStudents = () => {
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-20 md:mb-0">
         {/* Search Bar */}
-        <div className="p-6 border-b border-slate-100">
-          <div className="relative max-w-md">
+        <div className="p-4 md:p-6 border-b border-slate-100 sticky top-0 bg-white z-10">
+          <div className="relative w-full md:max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-slate-400" />
             </div>
             <input
               type="text"
-              placeholder="Search students by name, email, or department..."
-              className="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+              placeholder="Search students..."
+              className="block w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition duration-150 ease-in-out"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        {/* Table */}
+        {/* Table/Card View */}
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3 p-4 bg-slate-50/50 min-h-[300px]">
+            {loading ? (
+              <div className="text-center py-10 text-slate-500">
+                <Loader className="animate-spin size-8 text-blue-500 mx-auto mb-2" />
+                <p>Loading students...</p>
+              </div>
+            ) : filteredStudents?.length === 0 ? (
+              <div className="text-center py-10 text-slate-500 bg-white rounded-lg border border-slate-200 border-dashed">
+                <p>No students found.</p>
+              </div>
+            ) : (
+              filteredStudents?.map((student) => (
+                <div key={student._id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg border border-blue-200">
+                        {student.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-900 border-b border-transparent hover:border-slate-300 inline-block transition-colors">{student.name}</h3>
+                        <div className="flex items-center text-xs text-slate-500 mt-0.5">
+                          <Mail className="w-3 h-3 mr-1" />
+                          <span className="truncate max-w-[180px]">{student.email}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-sm py-3 border-t border-b border-slate-50 mb-3">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Department</span>
+                      <span className="font-medium text-slate-700 flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+                        {student.department || "N/A"}
+                      </span>
+                    </div>
+                    <div className="flex flex-col text-right">
+                      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Supervisor</span>
+                      <span className="font-medium text-slate-700">{student.supervisor?.name || <span className="text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded textxs">Unassigned</span>}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-slate-400 italic truncate max-w-[120px]">
+                      {student.project && student.project.length > 0 ? student.project[0].title : "No Project"}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEditClick(student)}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold active:scale-95 transition-transform"
+                      >
+                        <Edit size={14} /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(student._id)}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold active:scale-95 transition-transform"
+                      >
+                        <Trash2 size={14} /> Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop Table View */}
+          <table className="hidden md:table min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
@@ -231,6 +299,15 @@ const ManageStudents = () => {
           </div>
         )}
       </div>
+
+      {/* Floating Action Button (Mobile Only) */}
+      <button
+        onClick={() => setIsAddModalOpen(true)}
+        className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-xl shadow-blue-500/40 hover:bg-blue-700 active:scale-90 transition-all z-40 flex items-center justify-center"
+        aria-label="Add Student"
+      >
+        <Plus size={24} />
+      </button>
 
       {/* Add Student Modal */}
       <AddStudent
