@@ -3,6 +3,7 @@ import { ErrorHandler } from "../middleware/error.js";
 
 export const getProjectByStudentId = async (studentId) => {
     return await Project.findOne({ student: studentId })
+        .populate("supervisor", "name email")
         .sort({ createdAt: -1 });
 };
 

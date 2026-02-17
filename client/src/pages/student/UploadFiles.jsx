@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProject, uploadFile } from "../../store/slices/studentSlice";
+import { axiosInstance } from "../../lib/axios";
 import {
   UploadCloud,
   File,
@@ -108,7 +109,24 @@ const UploadFiles = () => {
     });
   };
 
-  if (!project) return null; // Loading state handled by skeleton or parent usually
+  if (!project && !loading) {
+    return (
+      <div className="min-h-screen bg-slate-50/50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12 text-center max-w-md w-full">
+          <div className="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <FileText className="w-10 h-10 text-blue-600" />
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 mb-3">No Active Project</h3>
+          <p className="text-slate-500 mb-8">
+            You need to create a project proposal before you can upload deliverables.
+          </p>
+          <a href="/student/submit-proposal" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all">
+            Create Proposal
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50/50 font-sans text-slate-800 pb-20 md:pb-12">
@@ -309,7 +327,7 @@ const UploadFiles = () => {
 
                   <div className="flex items-center gap-2">
                     <a
-                      href={`http://localhost:5000/api/v1/student/view-file/${project._id}/${file._id}`}
+                      href={`${axiosInstance.defaults.baseURL}/student/view-file/${project._id}/${file._id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all"
@@ -318,7 +336,7 @@ const UploadFiles = () => {
                       <Eye className="w-5 h-5" />
                     </a>
                     <a
-                      href={`http://localhost:5000/api/v1/student/download-file/${project._id}/${file._id}`}
+                      href={`${axiosInstance.defaults.baseURL}/student/download-file/${project._id}/${file._id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded-full transition-all"

@@ -13,7 +13,7 @@ export const getStudentProject = asyncHandler(async (req, res) => {
     const project = await projectService.getProjectByStudentId(studentId);
 
     if (!project) {
-        return res.status(404).json({
+        return res.status(200).json({
             success: true,
             data: { project: null },
             message: "Project not found",

@@ -26,6 +26,9 @@ export const fetchProject = createAsyncThunk(
       const response = await axiosInstance.get("/student/project");
       return response.data.data?.project;
     } catch (error) {
+      if (error.response?.status === 404) {
+        return null;
+      }
       // Quietly fail for fetchProject as it might just mean no project exists yet
       return rejectWithValue(error.response?.data || { message: "Failed to fetch project" });
     }
